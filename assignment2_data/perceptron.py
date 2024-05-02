@@ -40,6 +40,7 @@ class Perceptron:
 
         # Initialise params
         self.weights = np.random.uniform(-1, 1, size=n_features)
+        self.weights[0] = 1
         y_ = np.where(y_train > 0, 1, 0)
 
         iteration = 0
@@ -47,8 +48,8 @@ class Perceptron:
         while iteration < self.n_iters:
             misclassified = 0
             for i, x_i in enumerate(X_train):
-                output = np.dot(x_i, self.weights)
-                y_pred = self.activation_func(output)
+                weighted_sum = np.dot(x_i, self.weights)
+                y_pred = self.activation_func(weighted_sum)
 
                 # Perceptron update rule
                 update = self.lr * (y_[i] - y_pred)
@@ -139,7 +140,7 @@ def main(file_name):
 
     print(f'\n\n Training Data: {100-test_ratio*100:.0f}% and Test Data: {test_ratio*100:.0f}%\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     X_train, y_train, X_test, y_test = train_test_split(data, labels_encoded, test_ratio=test_ratio)
-    perform_classification(X_train, y_train, X_test, y_test, iters=160)
+    perform_classification(X_train, y_train, X_test, y_test, iters=1000)
 
 
 
