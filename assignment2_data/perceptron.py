@@ -10,7 +10,6 @@ import sys
 def step_function(x):
     return np.where(x > 0, 1, 0)
 
-
 class Perceptron:
     def __init__(self, learning_rate=1, n_iters=100):
         self.lr = learning_rate
@@ -112,7 +111,7 @@ def train_test_split(data, labels, test_ratio=0.3):
     return train_data, train_labels, test_data, test_labels
 
 
-def perform_classification(X, y, X_test, y_test, lr=1, iters=100):
+def perform_classification(X, y, X_test, y_test, lr=1.0, iters=100):
     perceptron = Perceptron(learning_rate=lr, n_iters=iters)
     perceptron.fit(X, y)
     y_pred = perceptron.predict(X_test)
@@ -131,16 +130,16 @@ def perform_classification(X, y, X_test, y_test, lr=1, iters=100):
 
 def main(file_name):
     dataset = load_dataset(file_name)
-    test_ratio = 0.2
+    test_ratio = 0.3
 
     print('\n\n Training Data == Test Data\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     labels, data = get_labels_and_data(dataset)
     labels_encoded = binary_encode_labels(labels)
-    perform_classification(data, labels_encoded, data, labels_encoded, iters=160)
+    perform_classification(data, labels_encoded, data, labels_encoded, lr=0.01, iters=160)
 
     print(f'\n\n Training Data: {100-test_ratio*100:.0f}% and Test Data: {test_ratio*100:.0f}%\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     X_train, y_train, X_test, y_test = train_test_split(data, labels_encoded, test_ratio=test_ratio)
-    perform_classification(X_train, y_train, X_test, y_test, iters=1000)
+    perform_classification(X_train, y_train, X_test, y_test, lr=0.01, iters=320)
 
 
 
