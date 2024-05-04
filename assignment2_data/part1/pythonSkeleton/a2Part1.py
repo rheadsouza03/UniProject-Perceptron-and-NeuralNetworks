@@ -25,9 +25,9 @@ if __name__ == '__main__':
     data = pd.read_csv('penguins307-train.csv')
     # the class label is last!
     labels = data.iloc[:, -1]
-    # seperate the data from the labels
+    # separate the data from the labels
     instances = data.iloc[:, :-1]
-    #scale features to [0,1] to improve training
+    # scale features to [0,1] to improve training
     scaler = MinMaxScaler()
     instances = scaler.fit_transform(instances)
     # We can't use strings as labels directly in the network, so need to do some transformations
@@ -58,14 +58,19 @@ if __name__ == '__main__':
         instance1_predicted_label = label_encoder.inverse_transform(instance1_prediction)
     print('Predicted label for the first instance is: {}\n'.format(instance1_predicted_label))
 
-    # TODO: Perform a single backpropagation pass using the first instance only. (In other words, train with 1
+    # Perform a single backpropagation pass using the first instance only. (In other words, train with 1
     #  instance for 1 epoch!). Hint: you will need to first get the weights from a forward pass.
+    nn.train([instances[0]], integer_encoded, 1)
 
     print('Weights after performing BP for first instance only:')
     print('Hidden layer weights:\n', nn.hidden_layer_weights)
     print('Output layer weights:\n', nn.output_layer_weights)
 
-    # TODO: Train for 100 epochs, on all instances.
+    nn = Neural_Network(n_in, n_hidden, n_out, initial_hidden_layer_weights, initial_output_layer_weights,
+                        learning_rate)
+    # Train for 100 epochs, on all instances.
+    nn.train(instances, integer_encoded, 100)
+
     print('\nAfter training:')
     print('Hidden layer weights:\n', nn.hidden_layer_weights)
     print('Output layer weights:\n', nn.output_layer_weights)
@@ -73,7 +78,18 @@ if __name__ == '__main__':
     pd_data_ts = pd.read_csv('penguins307-test.csv')
     test_labels = pd_data_ts.iloc[:, -1]
     test_instances = pd_data_ts.iloc[:, :-1]
+
     #scale the test according to our training data.
     test_instances = scaler.transform(test_instances)
 
-    # TODO: Compute and print the test accuracy
+    # Compute and print the test accuracy
+    # Make predictions on test instances
+    test_predictions = nn.predict(test_instances)
+
+    # Convert test labels to one-hot encoded format
+    test_labels_encoded = label_encoder.transform(test_labels)
+    test_labels_onehot = onehot_encoder.transform(test_labels_encoded.reshape(-1, 1))
+
+    # Compute accuracy
+    test_accuracy = np.mean(test_predictions == np.argmax(test_labels_onehot, axis=1)) * 100
+    print('Test accuracy: {:.2f}%'.format(test_accuracy))
