@@ -1,5 +1,4 @@
 # Name: Rhea D'Souza
-# Username: dsouzrhea
 
 import numpy as np
 import pandas as pd
