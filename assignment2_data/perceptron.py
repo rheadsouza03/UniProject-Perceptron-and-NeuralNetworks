@@ -1,6 +1,5 @@
 # Name: Rhea D'Souza
-# Username:
-# UID: 300627012
+# Username: dsouzrhea
 
 import numpy as np
 import pandas as pd
