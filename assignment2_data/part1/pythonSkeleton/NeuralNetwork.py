@@ -1,6 +1,5 @@
 # Name: Rhea D'Souza
-# Username: dsouzrhea
-# UID: 300627012
+
 import numpy as np
 
 
